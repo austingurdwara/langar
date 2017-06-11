@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/index.html"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+	<servlet>
+		<servlet-name>LangarCreate</servlet-name>
+		<servlet-class>langar.LangarCreateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LangarCreate</servlet-name>
+		<url-pattern>/create</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LangarUpdate</servlet-name>
+		<servlet-class>langar.LangarUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LangarUpdate</servlet-name>
+		<url-pattern>/update</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>LangarClearAll</servlet-name>
+		<servlet-class>langar.LangarClearAllServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LangarClearAll</servlet-name>
+		<url-pattern>/clearall</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LangarInfo</servlet-name>
+		<servlet-class>langar.LangarInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LangarInfo</servlet-name>
+		<url-pattern>/langar</url-pattern>
+	</servlet-mapping>
+    
+    
+	<welcome-file-list>
+		<welcome-file>langar</welcome-file>
+	</welcome-file-list>
+</web-app>
