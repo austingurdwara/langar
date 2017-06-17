@@ -36,13 +36,20 @@ public class LangarCreateServlet extends HttpServlet {
        	 resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
        	 return;
         }
-    	
-        if (!"amarsinghaustin@gmail.com".equals(user.getEmail().toLowerCase())) {
-        	System.out.println("user is " + user.getEmail());
-    		resp.getWriter().println("Sorry!");
-    		return;
-    	}
         
+
+        /* Only User with UserManagement or amarsignhatustin are allowed access*/
+        boolean isSuperUser = false;
+        if ("amarsinghaustin@gmail.com".equals(user.getEmail().toLowerCase())) {
+        	isSuperUser = true;
+        	req.setAttribute("superuser", "true");
+    	}
+
+        if (firstTime && !isSuperUser) {
+        	resp.getWriter().println("User not authorized");
+        	return;
+        }
+
         if (firstTime) {
         	LangarEntity langarE = new LangarEntity();
         	langarE.createLangar();
@@ -52,21 +59,52 @@ public class LangarCreateServlet extends HttpServlet {
         	resp.getWriter().println("Done!");
         	return;
         }
+
+
+        UserEntity userE = new UserEntity();
+        Entity entity = userE.findUser(user.getEmail().toLowerCase());
+        
+        boolean isAllowUserMgmt = false;
+        if (entity != null) {
+        	String s = (String)entity.getProperty(UserEntity.ALLOWUSERMGMT);
+        	if (UserEntity.SUPERUSERYES.equals(s))
+        		isAllowUserMgmt = true;
+        } 
+
+ 
+        if (!isSuperUser && !isAllowUserMgmt) {
+        	resp.getWriter().println("User not authorized");
+        	return;
+        }
+
+        
         
         String username = req.getParameter("UserName");
         String email = req.getParameter("UserEmail");
         String superuser = req.getParameter("SuperUser");
         String delete = req.getParameter("Delete");
-        UserEntity userE = new UserEntity();
+        String allowUserMgmt = req.getParameter("AllowUserMgmt");
+        userE = new UserEntity();
         if (username == null) username = "";
         if (email == null) email = "";
         if ("yes".equals(delete)) {
+                if (!isSuperUser) {
+        	  resp.getWriter().println("User not authorized");
+        	  return;
+                }
         	userE.deleteUser(username, email);
+        	req.setAttribute("message", "User " + email + " deleted");
+            
         } else if (!username.equals("")) 
         {
         	if (!"yes".equals(superuser)) superuser = "no";
-        	userE.createUser(username, email, superuser);
-        	req.setAttribute("message", "User " + username + " created!");
+        	if (!"yes".equals(allowUserMgmt)) allowUserMgmt = "no";
+                if (!isSuperUser) {
+        	   userE.createOrUpdateUser(username, email);
+                } else {
+        	   userE.createOrUpdateUser(username, email, superuser, allowUserMgmt);
+                }
+        	req.setAttribute("message", "User " + username + " created/updated!");
         }
         
     	

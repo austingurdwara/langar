@@ -4,6 +4,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.google.appengine.api.datastore.*" %>
 <%@ page import="langar.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.text.*" %>
 <html>
   <head>
     <meta charset="utf-8">
@@ -13,7 +15,13 @@
  
   <body>
    <div>
-             <p align="right">Last Modified: <%= request.getAttribute("lastmodified") %></p>
+             <% Date d =  (Date)request.getAttribute("lastmodified");
+                TimeZone timeZone = TimeZone.getTimeZone("America/Chicago");
+                DateFormat requiredFormat=new SimpleDateFormat("MM/dd/yyyy HH:mm");
+                requiredFormat.setTimeZone(timeZone);
+                String mydate = requiredFormat.format(d);
+             %>
+             <p align="right">Last Modified: <%= mydate %></p>
              <table border="1" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #000000" >
             <tbody>
               <tr>

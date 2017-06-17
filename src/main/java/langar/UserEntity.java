@@ -26,6 +26,7 @@ public class UserEntity {
    final public static String NAME = "name";
    final public static String EMAIL = "email";
    final public static String SUPERUSER = "superuser";
+   final public static String ALLOWUSERMGMT = "AllowUserMgmt";
    final public static String SUPERUSERYES = "yes";
    
    final private static String USERKEY = "User";
@@ -45,7 +46,10 @@ public class UserEntity {
       datastore.put(userEntity);      
   }
   
-  public void createUser(String name, String email, String superuser) {
+  public void createOrUpdateUser(String name, String email) {
+    this.createOrUpdateUser(name, email,  null, null);
+  }
+  public void createOrUpdateUser(String name, String email, String superuser, String allowusermgmt) {
      Key userKey = KeyFactory.createKey(MAINKEY, MAINVALUE);
      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
      Transaction tx = datastore.beginTransaction();
@@ -59,9 +63,22 @@ public class UserEntity {
         userEntity = new Entity(USERKEY, userKey);
         userEntity.setProperty(NAME, name);
         userEntity.setProperty(EMAIL, email);
+        if (superuser == null) superuser = "no";
         userEntity.setProperty(SUPERUSER, superuser);      
+        if (allowusermgmt == null) allowusermgmt = "no";
+        userEntity.setProperty(ALLOWUSERMGMT, allowusermgmt);      
         datastore.put(tx, userEntity);              
+     } else {
+        userEntity.setProperty(NAME, name);
+        if (superuser != null) {
+           userEntity.setProperty(SUPERUSER, superuser);      
+        }
+        if (allowusermgmt != null) {
+           userEntity.setProperty(ALLOWUSERMGMT, allowusermgmt);      
+        }
+        datastore.put(tx, userEntity);
      }
+   
      tx.commit();
   }
   
