@@ -68,6 +68,7 @@ public class LangarClearAllServlet extends HttpServlet {
         	
         	LangarEntity l = new LangarEntity();
         	l.clearallSewa();
+                l.setLangarClearanceDate();
     		resp.sendRedirect( resp.encodeRedirectURL("/langar?Yes"));
         } catch (Exception e) {
         	System.out.println("Faied " + e);

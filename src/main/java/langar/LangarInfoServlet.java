@@ -26,8 +26,10 @@ public class LangarInfoServlet extends HttpServlet {
 		LangarEntity langarE = new LangarEntity();
 		List<Entity> assignments = langarE.getLangar();
 		Date lastmodified = langarE.getLangarModificationDate();
+		Date lastclearancedate = langarE.getLangarClearanceDate();
 		req.setAttribute("assignments", assignments);
 		req.setAttribute("lastmodified", lastmodified);
+		req.setAttribute("lastclearancedate", lastclearancedate);
 		
 		if (readOnly) {
 			try {

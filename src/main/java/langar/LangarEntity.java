@@ -77,6 +77,29 @@ public class LangarEntity {
       datastore.put(sewaEntity);
   }
   
+  public Date getLangarClearanceDate() {
+      Key langarKey = KeyFactory.createKey(MAINKEY, MAINVALUE);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Entity langarE = null;
+      try { langarE = datastore.get(langarKey); }
+      catch(Exception ex) { return null; }
+      Date lastClearanceDate = (Date) langarE.getProperty("LastResetTime");
+      return lastClearanceDate;
+  }
+
+  public Date setLangarClearanceDate() {
+      Key langarKey = KeyFactory.createKey(MAINKEY, MAINVALUE);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Transaction tx = datastore.beginTransaction();
+      Entity langarE = null;
+      try { langarE = datastore.get(langarKey); }
+      catch(Exception ex) { return null; }
+      Date lastClearanceDate = new Date();
+      langarE.setProperty("LastResetTime", lastClearanceDate);
+      datastore.put(tx, langarE);
+      tx.commit();
+      return lastClearanceDate;
+  }
   public Date getLangarModificationDate() {
       Key langarKey = KeyFactory.createKey(MAINKEY, MAINVALUE);
       Query query = new Query(SEWAKEY).setAncestor(langarKey).addSort(LASTMODIFIED, SortDirection.DESCENDING);

@@ -4,6 +4,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.google.appengine.api.datastore.*" %>
 <%@ page import="langar.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.text.*" %>
 
 <html>
   <head>
@@ -17,6 +19,20 @@
   <body>
    <div>
     <form  action="/clearall" method="get">
+    <%
+        Date lastclearancedate = (Date)request.getAttribute("lastclearancedate");
+        String mydate = "";
+        if (lastclearancedate != null) {
+                TimeZone timeZone = TimeZone.getTimeZone("America/Chicago");
+                DateFormat requiredFormat=new SimpleDateFormat("MM/dd/yyyy HH:mm");
+                requiredFormat.setTimeZone(timeZone);
+                mydate = requiredFormat.format(lastclearancedate);
+        }
+
+    %>
+       Last Clearance date for Langar is <%= mydate %>
+       <input id="clearall" name="clearapp" type="submit" value="Clear All Langar Assignments"/>
+       <br/><br/>
     <%
         List<Entity> assignments = (List<Entity>)request.getAttribute("assignments");
         String currentuser = (String)request.getAttribute("currentuser");
