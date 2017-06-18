@@ -38,7 +38,7 @@ public class LangarUpdateServlet extends HttpServlet {
         //do we have all the data we need for update?
         String email = user.getEmail();
         UserEntity userE = new UserEntity();
-        Entity entity = userE.findUser(email);
+        Entity entity = userE.findAndCreateUser(email);
         
         boolean isSuperUser = false;
         String username = user.getNickname();

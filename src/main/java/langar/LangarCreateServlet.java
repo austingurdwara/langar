@@ -102,7 +102,7 @@ public class LangarCreateServlet extends HttpServlet {
                 if (!isSuperUser) {
         	   userE.createOrUpdateUser(username, email);
                 } else {
-        	   userE.createOrUpdateUser(username, email, superuser, allowUserMgmt);
+        	   userE.createOrUpdateUser(username, email, superuser, allowUserMgmt, true);
                 }
         	req.setAttribute("message", "User " + username + " created/updated!");
         }

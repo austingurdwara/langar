@@ -47,9 +47,9 @@ public class UserEntity {
   }
   
   public void createOrUpdateUser(String name, String email) {
-    this.createOrUpdateUser(name, email,  null, null);
+    this.createOrUpdateUser(name, email,  null, null, true);
   }
-  public void createOrUpdateUser(String name, String email, String superuser, String allowusermgmt) {
+  public Entity createOrUpdateUser(String name, String email, String superuser, String allowusermgmt, boolean update) {
      Key userKey = KeyFactory.createKey(MAINKEY, MAINVALUE);
      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
      Transaction tx = datastore.beginTransaction();
@@ -68,7 +68,7 @@ public class UserEntity {
         if (allowusermgmt == null) allowusermgmt = "no";
         userEntity.setProperty(ALLOWUSERMGMT, allowusermgmt);      
         datastore.put(tx, userEntity);              
-     } else {
+     } else if (update) {
         userEntity.setProperty(NAME, name);
         if (superuser != null) {
            userEntity.setProperty(SUPERUSER, superuser);      
@@ -80,6 +80,8 @@ public class UserEntity {
      }
    
      tx.commit();
+     return userEntity;
+
   }
   
   public void deleteUser(String name, String email) {
@@ -98,6 +100,11 @@ public class UserEntity {
      
   }
   
+  /* find user if exists or create one and return Entity */
+  public Entity findAndCreateUser(String email) {
+     return this.createOrUpdateUser(email, email, null, null, false);
+  }
+
   public Entity findUser(String email) {
      Key userKey = KeyFactory.createKey(MAINKEY, MAINVALUE);
      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
